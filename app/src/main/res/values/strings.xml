@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MyNewProject</string>
+    <string name="myConstString1">Hello world</string>
+    <string name="myConstString2">Hello worldHello worldHello worldHello worldHello world</string>
+</resources>
