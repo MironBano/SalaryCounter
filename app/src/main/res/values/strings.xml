@@ -1,5 +1,10 @@
 <resources>
-    <string name="app_name">MyNewProject</string>
-    <string name="myConstString1">Hello world</string>
-    <string name="myConstString2">Hello worldHello worldHello worldHello worldHello world</string>
+    <string name="app_name">Salary Counter</string>
+    <string name="hoursDaily">Amount of working hours daily</string>
+    <string name="salaryAmount">Salary amount</string>
+    <string name="daysTotal">Total working days in month</string>
+    <string name="warningMissingInformation">Please, enter all information</string>
+    <string name="warningClosingActivity">Press back again to exit</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
 </resources>
