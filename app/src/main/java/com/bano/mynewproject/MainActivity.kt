@@ -1,11 +1,16 @@
 package com.bano.mynewproject
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.bano.mynewproject.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -18,15 +23,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         setupBackPressedCallback()
-        binding.button.setOnClickListener(buttonClickListener())
+        binding.startButton.setOnClickListener(buttonClickListener())
+
+        setSupportActionBar(binding.toolbarMain)
+
     }
 
     private fun buttonClickListener() = View.OnClickListener {
-        if (binding.editTextNumber.text.isNotEmpty() && binding.editTextNumber2.text.isNotEmpty() && binding.editTextNumber3.text.isNotEmpty()) {
-            val amount = binding.editTextNumber.text.toString().toInt()
-            val hoursInDay = binding.editTextNumber2.text.toString().toInt()
-            val totalDays = binding.editTextNumber3.text.toString().toInt()
+        if (binding.editText1.text.isNotEmpty() && binding.editText2.text.isNotEmpty() && binding.editText3.text.isNotEmpty()) {
+            val amount = binding.editText1.text.toString().toInt()
+            val hoursInDay = binding.editText2.text.toString().toInt()
+            val totalDays = binding.editText3.text.toString().toInt()
             val salaryInformation = SalaryInformation(amount, hoursInDay, totalDays)
 
             val intent = Intent(this@MainActivity, CounterActivity::class.java)
@@ -48,6 +57,23 @@ class MainActivity : AppCompatActivity() {
                 ).show()
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.countersMenuMain -> {
+                val intent = Intent(this@MainActivity, SavedCountersActivity::class.java)
+                startActivity(intent)
+            }
+
+            R.id.exitMenuMain -> finish()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 }
