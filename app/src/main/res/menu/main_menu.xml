@@ -2,16 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/countersMenuMain"
+        android:id="@+id/saved_counters"
         android:title="@string/savedCounters"
-        android:orderInCategory="0"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/exitMenuMain"
-        android:title="@string/exit_app"
-        android:orderInCategory="1"
-        app:showAsAction="never"
+        android:icon="@drawable/saved_counters_list"
+        app:showAsAction="ifRoom"
         />
 
 </menu>

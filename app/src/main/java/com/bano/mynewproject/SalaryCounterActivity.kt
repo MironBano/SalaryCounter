@@ -1,8 +1,6 @@
 package com.bano.mynewproject
 
-import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -10,10 +8,10 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
+import com.bano.mynewproject.CounterList.SavedCountersActivity
 import com.bano.mynewproject.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class SalaryCounterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private var lastBackPressedTime: Long = 0
@@ -28,6 +26,11 @@ class MainActivity : AppCompatActivity() {
         binding.startButton.setOnClickListener(buttonClickListener())
 
         setSupportActionBar(binding.toolbarMain)
+        with(supportActionBar) {
+            this?.setDisplayHomeAsUpEnabled(true)
+            this?.setHomeAsUpIndicator(R.drawable.baseline_arrow_back)
+            this?.setDisplayShowHomeEnabled(true)
+        }
 
     }
 
@@ -38,7 +41,7 @@ class MainActivity : AppCompatActivity() {
             val totalDays = binding.editText3.text.toString().toInt()
             val salaryInformation = SalaryInformation(amount, hoursInDay, totalDays)
 
-            val intent = Intent(this@MainActivity, CounterActivity::class.java)
+            val intent = Intent(this@SalaryCounterActivity, CounterActivity::class.java)
             intent.putExtra("salaryInformation", salaryInformation)
             startActivity(intent)
         } else {
@@ -53,7 +56,7 @@ class MainActivity : AppCompatActivity() {
             } else {
                 lastBackPressedTime = System.currentTimeMillis()
                 Toast.makeText(
-                    this@MainActivity, R.string.warningClosingActivity, Toast.LENGTH_SHORT
+                    this@SalaryCounterActivity, R.string.warningClosingActivity, Toast.LENGTH_SHORT
                 ).show()
             }
         }
@@ -65,15 +68,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.countersMenuMain -> {
-                val intent = Intent(this@MainActivity, SavedCountersActivity::class.java)
+        return when (item.itemId) {
+            R.id.saved_counters -> {
+                val intent = Intent(this@SalaryCounterActivity, SavedCountersActivity::class.java)
                 startActivity(intent)
+                true
             }
-
-            R.id.exitMenuMain -> finish()
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
     }
 
 }

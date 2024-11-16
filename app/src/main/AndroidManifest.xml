@@ -13,14 +13,14 @@
         android:theme="@style/Theme.MyNewProject"
         tools:targetApi="31">
         <activity
-            android:name=".SavedCountersActivity"
+            android:name=".CounterList.SavedCountersActivity"
             android:exported="false"
             android:label="@string/title_activity_saved_counters" />
         <activity
             android:name=".CounterActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".SalaryCounterActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

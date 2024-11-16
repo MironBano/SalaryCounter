@@ -1,10 +1,11 @@
-package com.bano.mynewproject
+package com.bano.mynewproject.CounterList
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
+import com.bano.mynewproject.R
 
 class CounterListAdapter(private val items: MutableList<CounterListItem>) : BaseAdapter() {
     override fun getCount(): Int = items.size

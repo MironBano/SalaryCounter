@@ -1,12 +1,12 @@
 <resources>
     <string name="app_name">Salary Counter</string>
     <string name="warningClosingActivity">Press back again to exit</string>
+    <string name="warningMissingInformation">Please, enter all information</string>
 
     <!-- MainActivity -->
     <string name="hoursDaily">Amount of working hours daily</string>
     <string name="salaryAmount">Salary amount</string>
     <string name="daysTotal">Total working days in month</string>
-    <string name="warningMissingInformation">Please, enter all information</string>
     <string name="start">Start</string>
 
     <!-- CounterActivity -->
@@ -19,6 +19,11 @@
 
     <!-- SaveCountersActivity -->
     <string name="saved_counters">Saved counters</string>
+    <string name="add_counter">Add counter</string>
+    <string name="save">Save</string>
+    <string name="counterName">Counter name</string>
+
+
 
 
 </resources>
