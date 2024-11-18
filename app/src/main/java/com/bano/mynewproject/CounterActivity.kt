@@ -31,7 +31,7 @@ class CounterActivity : AppCompatActivity() {
         binding.stopBTN.setOnClickListener {
             startActivity(
                 Intent(
-                    this, MainActivity::class.java
+                    this, SalaryCounterActivity::class.java
                 ).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             )
         }
@@ -41,7 +41,7 @@ class CounterActivity : AppCompatActivity() {
     }
 
     @SuppressLint("DefaultLocale", "SetTextI18n")
-    private suspend fun startCounter(salaryInfo: SalaryInformation) {
+    private fun startCounter(salaryInfo: SalaryInformation) {
         val amount = salaryInfo.amount.toDouble()
         val hours = salaryInfo.hoursInDay.toDouble()
         val days = salaryInfo.days.toDouble()
@@ -60,7 +60,7 @@ class CounterActivity : AppCompatActivity() {
             if (System.currentTimeMillis() - lastBackPressedTime < exitDelay) {
                 startActivity(
                     Intent(
-                        this@CounterActivity, MainActivity::class.java
+                        this@CounterActivity, SalaryCounterActivity::class.java
                     ).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 )
             } else {
