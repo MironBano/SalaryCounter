@@ -11,13 +11,18 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.bano.mynewproject.R
 import com.bano.mynewproject.SalaryInformation
+import java.util.Date
 
 class AddCounterFragment : DialogFragment() {
 
     private var listener: OnCounterAddedListener? = null
 
     interface OnCounterAddedListener {
-        fun onCounterAdded(salaryInformation: SalaryInformation, counter: CounterListItem)
+        fun onCounterAdded(
+            salaryInformation: SalaryInformation,
+            counter: CounterListItem,
+            bornTime: BornTime
+        )
     }
 
     override fun onCreateView(
@@ -40,8 +45,9 @@ class AddCounterFragment : DialogFragment() {
             if (counterName.isNotEmpty() && salaryAmount.isNotEmpty() && hoursDaily.isNotEmpty() && daysTotal.isNotEmpty()) {
                 val salaryInfo =
                     SalaryInformation(salaryAmount.toInt(), hoursDaily.toInt(), daysTotal.toInt())
-                val newCounter = CounterListItem(counterName, salaryInfo.toString())
-                listener?.onCounterAdded(salaryInfo, newCounter)
+                val newCounter = CounterListItem(counterName, salaryInfo, salaryInfo.toString())
+                val bornTime = BornTime(counterName, Date())
+                listener?.onCounterAdded(salaryInfo, newCounter, bornTime)
                 dismiss()
             } else {
                 Toast.makeText(

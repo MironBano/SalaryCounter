@@ -1,3 +1,9 @@
 package com.bano.mynewproject.CounterList
 
-data class CounterListItem(val counterName: String, var counterState: String)
+import com.bano.mynewproject.SalaryInformation
+
+data class CounterListItem(
+    val counterName: String,
+    val salaryInformation: SalaryInformation,
+    var counterState: String
+)

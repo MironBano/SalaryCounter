@@ -1,9 +1,6 @@
 package com.bano.mynewproject.CounterList
 
-import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
-import android.provider.Telephony.Mms.Addr
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -11,20 +8,20 @@ import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.bano.mynewproject.R
-import com.bano.mynewproject.SalaryCounterActivity
 import com.bano.mynewproject.SalaryInformation
 import com.bano.mynewproject.databinding.ActivitySavedCountersBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.Date
+import java.util.concurrent.TimeUnit
 
 class SavedCountersActivity : AppCompatActivity(), AddCounterFragment.OnCounterAddedListener {
 
     private lateinit var binding: ActivitySavedCountersBinding
     private lateinit var counterJob: Job
     private val counters = mutableListOf<CounterListItem>()
+    private val bornTimesOfCounters = mutableListOf<BornTime>()
     private var lastBackPressedTime: Long = 0
     private val exitDelay: Long = 2000
 
@@ -40,40 +37,47 @@ class SavedCountersActivity : AppCompatActivity(), AddCounterFragment.OnCounterA
             this?.setHomeAsUpIndicator(R.drawable.baseline_arrow_back)
             this?.setDisplayShowHomeEnabled(true)
         }
+        binding.countersLV.adapter = CounterListAdapter(counters)
 
         //TODO("Implement getting info from db/files")
         //TODO("Implement saving state of counters")
-        //TODO("Implement adding counters by user")
-
-        val testSalaryInfo = SalaryInformation(60000, 12, 22)
-        counters += CounterListItem("Salary1", testSalaryInfo.amount.toString())
-        counters += CounterListItem("Salary2", testSalaryInfo.amount.toString())
-        counters += CounterListItem("Salary3", testSalaryInfo.amount.toString())
-
-        binding.countersLV.adapter = CounterListAdapter(counters)
-
-        counterJob = CoroutineScope(Dispatchers.Main).launch {
-            for (counter in counters) startCounter(testSalaryInfo, counter)
+        counterJob = lifecycleScope.launch {
+            for (counter in counters) {
+                val bornTime = bornTimesOfCounters.find { it.counterName == counter.counterName }
+                bornTime?.let { startCounter(counter, it) }
+            }
         }
-
     }
 
-    @SuppressLint("DefaultLocale", "SetTextI18n")
-    private fun startCounter(
-        salaryInfo: SalaryInformation,
-        counterListItem: CounterListItem
-    ) {
+    private fun startCounter(counterListItem: CounterListItem, bornTime: BornTime) {
         val amountUnit: Double =
-            salaryInfo.amount.toDouble() / salaryInfo.hoursInDay.toDouble() / salaryInfo.days.toDouble() / 3600
+            with(counterListItem.salaryInformation) {
+                amount.toDouble() / hoursInDay.toDouble() / days.toDouble() / 3600
+            }.toDouble()
         lifecycleScope.launch {
-            var counter = 0.0
+            var counterIntState = calculateAmountUnitFromBirth(counterListItem, bornTime)
             while (true) {
-                counter += amountUnit
-                counterListItem.counterState = String.format("%.2f", counter) + "₽"
+                counterIntState += amountUnit
+                counterListItem.counterState = "%.2f".format(counterIntState) + "₽"
                 delay(1000)
                 (binding.countersLV.adapter as CounterListAdapter).notifyDataSetChanged()
             }
         }
+    }
+
+    private fun calculateAmountUnitFromBirth(
+        counterListItem: CounterListItem,
+        bornTime: BornTime
+    ): Double {
+        val amountUnit: Double =
+            with(counterListItem.salaryInformation) {
+                amount.toDouble() / hoursInDay.toDouble() / days.toDouble() / 3600
+            }.toDouble()
+        val bornAmountUnit: Double =
+            TimeUnit.MILLISECONDS.toSeconds(Date().time - bornTime.dateTime.time)
+                .toDouble() * amountUnit
+
+        return bornAmountUnit
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -101,9 +105,14 @@ class SavedCountersActivity : AppCompatActivity(), AddCounterFragment.OnCounterA
         }
     }
 
-    override fun onCounterAdded(salaryInfo: SalaryInformation, counter: CounterListItem) {
+    override fun onCounterAdded(
+        salaryInformation: SalaryInformation,
+        counter: CounterListItem,
+        bornTime: BornTime
+    ) {
         counters.add(counter)
-        startCounter(salaryInfo, counter)
+        bornTimesOfCounters.add(bornTime)
+        startCounter(counter, bornTime)
         (binding.countersLV.adapter as CounterListAdapter).notifyDataSetChanged()
         binding.addFragmentContainer.setBackgroundColor(getColor(R.color.transparent))
     }

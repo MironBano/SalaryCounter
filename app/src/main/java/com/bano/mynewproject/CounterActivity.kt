@@ -40,7 +40,6 @@ class CounterActivity : AppCompatActivity() {
 
     }
 
-    @SuppressLint("DefaultLocale", "SetTextI18n")
     private fun startCounter(salaryInfo: SalaryInformation) {
         val amount = salaryInfo.amount.toDouble()
         val hours = salaryInfo.hoursInDay.toDouble()
@@ -49,7 +48,8 @@ class CounterActivity : AppCompatActivity() {
         lifecycleScope.launch {
             while (true) {
                 counter += amountUnit
-                binding.counterTV.text = String.format("%.2f", counter) + "₽"
+                val counterState = "%.2f".format(counter) + "₽"
+                binding.counterTV.text = counterState
                 delay(1000)
             }
         }
